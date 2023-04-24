@@ -1,0 +1,432 @@
+  [1m[35m (4.7ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (4.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateStudents (20230301132456)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "students" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "fname" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230301132456"]]
+  [1m[36mTRANSACTION (3.8ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateUniversities (20230301132513)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "universities" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230301132513"]]
+  [1m[36mTRANSACTION (3.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "development"], ["created_at", "2023-03-01 13:25:21.209738"], ["updated_at", "2023-03-01 13:25:21.209738"]]
+  [1m[36mTRANSACTION (2.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to AddReferenceToStudents (20230301132617)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "astudents" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "astudents" ("id","fname","created_at","updated_at")
+                     SELECT "id","fname","created_at","updated_at" FROM "students"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "students"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "students" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "univeristy_id" integer NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "students" ("id","fname","created_at","updated_at")
+                     SELECT "id","fname","created_at","updated_at" FROM "astudents"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "astudents"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_students_on_univeristy_id" ON "students" ("univeristy_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "astudents" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "univeristy_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_astudents_on_univeristy_id" ON "astudents" ("univeristy_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "astudents" ("id","fname","created_at","updated_at","univeristy_id")
+                     SELECT "id","fname","created_at","updated_at","univeristy_id" FROM "students"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "students"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "students" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "univeristy_id" integer NOT NULL, CONSTRAINT "fk_rails_b42018beb7"
+FOREIGN KEY ("univeristy_id")
+  REFERENCES "univeristies" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_students_on_univeristy_id" ON "students" ("univeristy_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[32mINSERT INTO "students" ("id","fname","created_at","updated_at","univeristy_id")
+                     SELECT "id","fname","created_at","updated_at","univeristy_id" FROM "astudents"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to AddReferenceToStudents (20230301132617)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TEMPORARY TABLE "astudents" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "astudents" ("id","fname","created_at","updated_at")
+                     SELECT "id","fname","created_at","updated_at" FROM "students"[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE "students"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "students" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "univeristy_id" integer NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "students" ("id","fname","created_at","updated_at")
+                     SELECT "id","fname","created_at","updated_at" FROM "astudents"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "astudents"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_students_on_univeristy_id" ON "students" ("univeristy_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "astudents" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "univeristy_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_astudents_on_univeristy_id" ON "astudents" ("univeristy_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "astudents" ("id","fname","created_at","updated_at","univeristy_id")
+                     SELECT "id","fname","created_at","updated_at","univeristy_id" FROM "students"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "students"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "students" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "univeristy_id" integer NOT NULL, CONSTRAINT "fk_rails_b42018beb7"
+FOREIGN KEY ("univeristy_id")
+  REFERENCES "univeristies" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_students_on_univeristy_id" ON "students" ("univeristy_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[32mINSERT INTO "students" ("id","fname","created_at","updated_at","univeristy_id")
+                     SELECT "id","fname","created_at","updated_at","univeristy_id" FROM "astudents"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to AddReferencesToStudents (20230301132843)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "astudents" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "astudents" ("id","fname","created_at","updated_at")
+                     SELECT "id","fname","created_at","updated_at" FROM "students"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "students"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "students" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "university_id" integer NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "students" ("id","fname","created_at","updated_at")
+                     SELECT "id","fname","created_at","updated_at" FROM "astudents"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "astudents"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_students_on_university_id" ON "students" ("university_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "astudents" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "university_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_astudents_on_university_id" ON "astudents" ("university_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "astudents" ("id","fname","created_at","updated_at","university_id")
+                     SELECT "id","fname","created_at","updated_at","university_id" FROM "students"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "students"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "students" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "university_id" integer NOT NULL, CONSTRAINT "fk_rails_37dbd97d15"
+FOREIGN KEY ("university_id")
+  REFERENCES "universities" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_students_on_university_id" ON "students" ("university_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "students" ("id","fname","created_at","updated_at","university_id")
+                     SELECT "id","fname","created_at","updated_at","university_id" FROM "astudents"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "astudents"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230301132843"]]
+  [1m[36mTRANSACTION (3.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUniversity Create (0.6ms)[0m  [1m[32mINSERT INTO "universities" ("name", "created_at", "updated_at") VALUES (?, ?, ?)[0m  [["name", "medicaps"], ["created_at", "2023-03-01 13:31:43.055576"], ["updated_at", "2023-03-01 13:31:43.055576"]]
+  [1m[36mTRANSACTION (4.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mStudent Load (0.2ms)[0m  [1m[34mSELECT "students".* FROM "students" WHERE "students"."university_id" = ?[0m  [["university_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mStudent Create (0.2ms)[0m  [1m[32mINSERT INTO "students" ("fname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["fname", "udit"], ["created_at", "2023-03-01 13:34:39.783362"], ["updated_at", "2023-03-01 13:34:39.783362"], ["university_id", 1]]
+  [1m[36mTRANSACTION (2.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mStudent Load (0.2ms)[0m  [1m[34mSELECT "students".* FROM "students"[0m
+  [1m[36mUniversity Load (0.2ms)[0m  [1m[34mSELECT "universities".* FROM "universities" ORDER BY "universities"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mStudent Load (0.1ms)[0m  [1m[34mSELECT "students".* FROM "students" WHERE "students"."university_id" = ?[0m  [["university_id", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mStudent Create (0.6ms)[0m  [1m[32mINSERT INTO "students" ("fname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["fname", "sakshi"], ["created_at", "2023-03-01 13:35:50.328810"], ["updated_at", "2023-03-01 13:35:50.328810"], ["university_id", 1]]
+  [1m[36mTRANSACTION (3.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mStudent Create (0.2ms)[0m  [1m[32mINSERT INTO "students" ("fname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["fname", "abc"], ["created_at", "2023-03-01 13:35:59.077844"], ["updated_at", "2023-03-01 13:35:59.077844"], ["university_id", 1]]
+  [1m[36mTRANSACTION (3.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mUniversity Load (0.1ms)[0m  [1m[34mSELECT "universities".* FROM "universities" ORDER BY "universities"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mStudent Load (0.1ms)[0m  [1m[34mSELECT "students".* FROM "students" WHERE "students"."university_id" = ?[0m  [["university_id", 1]]
+  [1m[36mStudent Load (0.1ms)[0m  [1m[34mSELECT "students".* FROM "students" ORDER BY "students"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mUniversity Load (0.2ms)[0m  [1m[34mSELECT "universities".* FROM "universities" WHERE "universities"."student_id" = ? LIMIT ?[0m  [["student_id", 1], ["LIMIT", 1]]
+  [1m[36mStudent Load (0.1ms)[0m  [1m[34mSELECT "students".* FROM "students" ORDER BY "students"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mStudent Load (0.1ms)[0m  [1m[34mSELECT "students".* FROM "students" ORDER BY "students"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mUniversity Load (0.4ms)[0m  [1m[34mSELECT "universities".* FROM "universities" WHERE "universities"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateDepartments (20230301133814)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "departments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "dname" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230301133814"]]
+  [1m[36mTRANSACTION (3.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mUniversity Load (0.2ms)[0m  [1m[34mSELECT "universities".* FROM "universities"[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateDepartments (20230301133814)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE "departments"[0m
+  [1m[36mActiveRecord::SchemaMigration Delete All (0.2ms)[0m  [1m[31mDELETE FROM "schema_migrations" WHERE "schema_migrations"."version" = ?[0m  [["version", "20230301133814"]]
+  [1m[36mTRANSACTION (1.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateDepartments (20230301133814)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "departments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "dname" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230301133814"]]
+  [1m[36mTRANSACTION (3.7ms)[0m  [1m[36mcommit transaction[0m
+Migrating to AddReferencesToDepartments (20230301134115)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "adepartments" ("id" integer NOT NULL PRIMARY KEY, "dname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "adepartments" ("id","dname","created_at","updated_at")
+                     SELECT "id","dname","created_at","updated_at" FROM "departments"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "departments"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "departments" ("id" integer NOT NULL PRIMARY KEY, "dname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "university_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "departments" ("id","dname","created_at","updated_at")
+                     SELECT "id","dname","created_at","updated_at" FROM "adepartments"[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE "adepartments"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_departments_on_university_id" ON "departments" ("university_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "adepartments" ("id" integer NOT NULL PRIMARY KEY, "dname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "university_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_adepartments_on_university_id" ON "adepartments" ("university_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "adepartments" ("id","dname","created_at","updated_at","university_id")
+                     SELECT "id","dname","created_at","updated_at","university_id" FROM "departments"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "departments"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "departments" ("id" integer NOT NULL PRIMARY KEY, "dname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "university_id" integer NOT NULL, CONSTRAINT "fk_rails_6c5c0da591"
+FOREIGN KEY ("university_id")
+  REFERENCES "universities" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_departments_on_university_id" ON "departments" ("university_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "departments" ("id","dname","created_at","updated_at","university_id")
+                     SELECT "id","dname","created_at","updated_at","university_id" FROM "adepartments"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "adepartments"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230301134115"]]
+  [1m[36mTRANSACTION (3.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to AddDeptReferencesToStudents (20230301134239)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "astudents" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "university_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_astudents_on_university_id" ON "astudents" ("university_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "astudents" ("id","fname","created_at","updated_at","university_id")
+                     SELECT "id","fname","created_at","updated_at","university_id" FROM "students"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "students"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "students" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "university_id" integer NOT NULL, "department_id" integer NOT NULL, CONSTRAINT "fk_rails_37dbd97d15"
+FOREIGN KEY ("university_id")
+  REFERENCES "universities" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_students_on_university_id" ON "students" ("university_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[32mINSERT INTO "students" ("id","fname","created_at","updated_at","university_id")
+                     SELECT "id","fname","created_at","updated_at","university_id" FROM "astudents"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to AddDeptToStudents (20230301134453)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "astudents" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "university_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_astudents_on_university_id" ON "astudents" ("university_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "astudents" ("id","fname","created_at","updated_at","university_id")
+                     SELECT "id","fname","created_at","updated_at","university_id" FROM "students"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "students"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "students" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "university_id" integer NOT NULL, "department_id" integer NOT NULL, CONSTRAINT "fk_rails_37dbd97d15"
+FOREIGN KEY ("university_id")
+  REFERENCES "universities" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_students_on_university_id" ON "students" ("university_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[32mINSERT INTO "students" ("id","fname","created_at","updated_at","university_id")
+                     SELECT "id","fname","created_at","updated_at","university_id" FROM "astudents"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mStudent Load (0.8ms)[0m  [1m[34mSELECT "students".* FROM "students"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mStudent Destroy (0.7ms)[0m  [1m[31mDELETE FROM "students" WHERE "students"."id" = ?[0m  [["id", 1]]
+  [1m[36mTRANSACTION (4.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mStudent Destroy (0.6ms)[0m  [1m[31mDELETE FROM "students" WHERE "students"."id" = ?[0m  [["id", 2]]
+  [1m[36mTRANSACTION (4.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mStudent Destroy (0.6ms)[0m  [1m[31mDELETE FROM "students" WHERE "students"."id" = ?[0m  [["id", 3]]
+  [1m[36mTRANSACTION (3.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mStudent Load (0.3ms)[0m  [1m[34mSELECT "students".* FROM "students"[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to AddDeptToStudents (20230301134631)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "astudents" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "university_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_astudents_on_university_id" ON "astudents" ("university_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "astudents" ("id","fname","created_at","updated_at","university_id")
+                     SELECT "id","fname","created_at","updated_at","university_id" FROM "students"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "students"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "students" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "university_id" integer NOT NULL, "department_id" integer NOT NULL, CONSTRAINT "fk_rails_37dbd97d15"
+FOREIGN KEY ("university_id")
+  REFERENCES "universities" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_students_on_university_id" ON "students" ("university_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "students" ("id","fname","created_at","updated_at","university_id")
+                     SELECT "id","fname","created_at","updated_at","university_id" FROM "astudents"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "astudents"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_students_on_department_id" ON "students" ("department_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "astudents" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "university_id" integer NOT NULL, "department_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_astudents_on_department_id" ON "astudents" ("department_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_astudents_on_university_id" ON "astudents" ("university_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "astudents" ("id","fname","created_at","updated_at","university_id","department_id")
+                     SELECT "id","fname","created_at","updated_at","university_id","department_id" FROM "students"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "students"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "students" ("id" integer NOT NULL PRIMARY KEY, "fname" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "university_id" integer NOT NULL, "department_id" integer NOT NULL, CONSTRAINT "fk_rails_37dbd97d15"
+FOREIGN KEY ("university_id")
+  REFERENCES "universities" ("id")
+, CONSTRAINT "fk_rails_96a32b5819"
+FOREIGN KEY ("department_id")
+  REFERENCES "departments" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_students_on_university_id" ON "students" ("university_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_students_on_department_id" ON "students" ("department_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "students" ("id","fname","created_at","updated_at","university_id","department_id")
+                     SELECT "id","fname","created_at","updated_at","university_id","department_id" FROM "astudents"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "astudents"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230301134631"]]
+  [1m[36mTRANSACTION (3.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mUniversity Load (0.3ms)[0m  [1m[34mSELECT "universities".* FROM "universities"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUniversity Destroy (0.2ms)[0m  [1m[31mDELETE FROM "universities" WHERE "universities"."id" = ?[0m  [["id", 1]]
+  [1m[36mTRANSACTION (3.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mUniversity Load (0.3ms)[0m  [1m[34mSELECT "universities".* FROM "universities"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mStudent Create (1.3ms)[0m  [1m[32mINSERT INTO "students" ("fname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["fname", nil], ["created_at", "2023-03-01 13:56:46.838040"], ["updated_at", "2023-03-01 13:56:46.838040"], ["university_id", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUniversity Create (0.7ms)[0m  [1m[32mINSERT INTO "universities" ("name", "created_at", "updated_at") VALUES (?, ?, ?)[0m  [["name", "Medicaps"], ["created_at", "2023-03-01 13:57:10.822228"], ["updated_at", "2023-03-01 13:57:10.822228"]]
+  [1m[36mTRANSACTION (3.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mStudent Create (0.3ms)[0m  [1m[32mINSERT INTO "students" ("fname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["fname", "udit"], ["created_at", "2023-03-01 13:57:28.548633"], ["updated_at", "2023-03-01 13:57:28.548633"], ["university_id", 2]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mStudent Create (0.3ms)[0m  [1m[32mINSERT INTO "students" ("fname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["fname", "udit"], ["created_at", "2023-03-01 13:57:53.062198"], ["updated_at", "2023-03-01 13:57:53.062198"], ["university_id", 2]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mUniversity Load (0.1ms)[0m  [1m[34mSELECT "universities".* FROM "universities"[0m
+  [1m[36mUniversity Load (0.1ms)[0m  [1m[34mSELECT "universities".* FROM "universities"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUniversity Destroy (0.3ms)[0m  [1m[31mDELETE FROM "universities" WHERE "universities"."id" = ?[0m  [["id", 2]]
+  [1m[36mTRANSACTION (3.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mUniversity Load (0.1ms)[0m  [1m[34mSELECT "universities".* FROM "universities"[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mDepartment Create (1.0ms)[0m  [1m[32mINSERT INTO "departments" ("dname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["dname", "cse"], ["created_at", "2023-03-01 14:01:59.322311"], ["updated_at", "2023-03-01 14:01:59.322311"], ["university_id", nil]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mDepartment Create (0.4ms)[0m  [1m[32mINSERT INTO "departments" ("dname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["dname", "cse"], ["created_at", "2023-03-01 14:02:09.154469"], ["updated_at", "2023-03-01 14:02:09.154469"], ["university_id", nil]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mDepartment Create (0.3ms)[0m  [1m[32mINSERT INTO "departments" ("dname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["dname", "cse"], ["created_at", "2023-03-01 14:02:16.690727"], ["updated_at", "2023-03-01 14:02:16.690727"], ["university_id", nil]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mDepartment Create (0.3ms)[0m  [1m[32mINSERT INTO "departments" ("dname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["dname", "cse"], ["created_at", "2023-03-01 14:02:45.176028"], ["updated_at", "2023-03-01 14:02:45.176028"], ["university_id", nil]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mDepartment Create (0.2ms)[0m  [1m[32mINSERT INTO "departments" ("dname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["dname", "cse"], ["created_at", "2023-03-01 14:03:35.920512"], ["updated_at", "2023-03-01 14:03:35.920512"], ["university_id", nil]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUniversity Create (0.2ms)[0m  [1m[32mINSERT INTO "universities" ("name", "created_at", "updated_at") VALUES (?, ?, ?)[0m  [["name", "medicaps"], ["created_at", "2023-03-01 14:04:24.425684"], ["updated_at", "2023-03-01 14:04:24.425684"]]
+  [1m[36mDepartment Create (0.1ms)[0m  [1m[32mINSERT INTO "departments" ("dname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["dname", "cse"], ["created_at", "2023-03-01 14:01:59.322311"], ["updated_at", "2023-03-01 14:01:59.322311"], ["university_id", 3]]
+  [1m[36mDepartment Create (0.1ms)[0m  [1m[32mINSERT INTO "departments" ("dname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["dname", "cse"], ["created_at", "2023-03-01 14:02:09.154469"], ["updated_at", "2023-03-01 14:02:09.154469"], ["university_id", 3]]
+  [1m[36mDepartment Create (0.1ms)[0m  [1m[32mINSERT INTO "departments" ("dname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["dname", "cse"], ["created_at", "2023-03-01 14:02:16.690727"], ["updated_at", "2023-03-01 14:02:16.690727"], ["university_id", 3]]
+  [1m[36mDepartment Create (0.1ms)[0m  [1m[32mINSERT INTO "departments" ("dname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["dname", "cse"], ["created_at", "2023-03-01 14:02:45.176028"], ["updated_at", "2023-03-01 14:02:45.176028"], ["university_id", 3]]
+  [1m[36mDepartment Create (0.0ms)[0m  [1m[32mINSERT INTO "departments" ("dname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["dname", "cse"], ["created_at", "2023-03-01 14:03:35.920512"], ["updated_at", "2023-03-01 14:03:35.920512"], ["university_id", 3]]
+  [1m[36mTRANSACTION (3.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mUniversity Load (0.3ms)[0m  [1m[34mSELECT "universities".* FROM "universities"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mDepartment Create (0.3ms)[0m  [1m[32mINSERT INTO "departments" ("dname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["dname", "cse"], ["created_at", "2023-03-01 14:04:35.986999"], ["updated_at", "2023-03-01 14:04:35.986999"], ["university_id", 3]]
+  [1m[36mTRANSACTION (3.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mDepartment Create (1.0ms)[0m  [1m[32mINSERT INTO "departments" ("dname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["dname", "csit"], ["created_at", "2023-03-01 14:05:04.576957"], ["updated_at", "2023-03-01 14:05:04.576957"], ["university_id", 3]]
+  [1m[36mTRANSACTION (4.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mDepartment Load (0.2ms)[0m  [1m[34mSELECT "departments".* FROM "departments"[0m
+  [1m[36mUniversity Load (0.4ms)[0m  [1m[34mSELECT "universities".* FROM "universities"[0m
+  [1m[36mDepartment Load (0.2ms)[0m  [1m[34mSELECT "departments".* FROM "departments"[0m
+  [1m[36mDepartment Load (0.2ms)[0m  [1m[34mSELECT "departments".* FROM "departments"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mDepartment Destroy (0.2ms)[0m  [1m[31mDELETE FROM "departments" WHERE "departments"."id" = ?[0m  [["id", 1]]
+  [1m[36mTRANSACTION (2.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mDepartment Destroy (0.1ms)[0m  [1m[31mDELETE FROM "departments" WHERE "departments"."id" = ?[0m  [["id", 2]]
+  [1m[36mTRANSACTION (3.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mDepartment Destroy (0.2ms)[0m  [1m[31mDELETE FROM "departments" WHERE "departments"."id" = ?[0m  [["id", 3]]
+  [1m[36mTRANSACTION (2.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mDepartment Destroy (0.2ms)[0m  [1m[31mDELETE FROM "departments" WHERE "departments"."id" = ?[0m  [["id", 4]]
+  [1m[36mTRANSACTION (2.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mDepartment Destroy (0.2ms)[0m  [1m[31mDELETE FROM "departments" WHERE "departments"."id" = ?[0m  [["id", 5]]
+  [1m[36mTRANSACTION (2.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mDepartment Destroy (0.1ms)[0m  [1m[31mDELETE FROM "departments" WHERE "departments"."id" = ?[0m  [["id", 6]]
+  [1m[36mTRANSACTION (2.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mDepartment Destroy (0.1ms)[0m  [1m[31mDELETE FROM "departments" WHERE "departments"."id" = ?[0m  [["id", 7]]
+  [1m[36mTRANSACTION (2.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mDepartment Load (0.1ms)[0m  [1m[34mSELECT "departments".* FROM "departments"[0m
+  [1m[36mUniversity Load (0.1ms)[0m  [1m[34mSELECT "universities".* FROM "universities" WHERE "universities"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mDepartment Create (0.2ms)[0m  [1m[32mINSERT INTO "departments" ("dname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["dname", "cse"], ["created_at", "2023-03-01 14:07:20.810853"], ["updated_at", "2023-03-01 14:07:20.810853"], ["university_id", 3]]
+  [1m[36mTRANSACTION (2.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mDepartment Load (0.7ms)[0m  [1m[34mSELECT "departments".* FROM "departments" WHERE "departments"."university_id" = ?[0m  [["university_id", 3]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUniversity Create (0.2ms)[0m  [1m[32mINSERT INTO "universities" ("name", "created_at", "updated_at") VALUES (?, ?, ?)[0m  [["name", "Deepak"], ["created_at", "2023-03-01 14:16:22.557353"], ["updated_at", "2023-03-01 14:16:22.557353"]]
+  [1m[36mTRANSACTION (2.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mDepartment Create (0.3ms)[0m  [1m[32mINSERT INTO "departments" ("dname", "created_at", "updated_at", "university_id") VALUES (?, ?, ?, ?)[0m  [["dname", "Mechanical"], ["created_at", "2023-03-01 14:16:51.838884"], ["updated_at", "2023-03-01 14:16:51.838884"], ["university_id", 4]]
+  [1m[36mTRANSACTION (3.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mDepartment Load (0.1ms)[0m  [1m[34mSELECT "departments".* FROM "departments" WHERE "departments"."university_id" = ?[0m  [["university_id", 4]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mUniversity Load (0.1ms)[0m  [1m[34mSELECT "universities".* FROM "universities" WHERE "universities"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  [1m[36mDepartment Load (0.6ms)[0m  [1m[34mSELECT "departments".* FROM "departments" WHERE "departments"."university_id" = ?[0m  [["university_id", 4]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUniversity Create (0.2ms)[0m  [1m[32mINSERT INTO "universities" ("name", "created_at", "updated_at") VALUES (?, ?, ?)[0m  [["name", "Medicaps"], ["created_at", "2023-03-01 14:21:52.592942"], ["updated_at", "2023-03-01 14:21:52.592942"]]
+  [1m[36mTRANSACTION (2.5ms)[0m  [1m[36mcommit transaction[0m
